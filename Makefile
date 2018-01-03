@@ -42,19 +42,19 @@ endif
 
 all:
 	@echo ""
-	@echo "## First time"
+	@echo "## Get the source"
 	@echo "make download"
+	@echo ""
+	@echo "## Build"
 	@echo "make prepare"
 	@echo "make configure [M=...]"
 	@echo "make compile [J=...]"
+	@echo ""
+	@echo "## Install"
 	@echo "sudo make install"
 	@echo ""
-	@echo "## Any other time"
+	@echo "## Cleanup"
 	@echo "make clean"
-	@echo "make prepare"
-	@echo "make configure [M=...]"
-	@echo "make compile [J=...]"
-	@echo "sudo make install"
 	@echo ""
 
 
