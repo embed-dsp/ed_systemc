@@ -1,0 +1,9 @@
+
+# Directories ...
+build/
+tmp/
+doc/
+src/
+
+# Backup files
+*~
