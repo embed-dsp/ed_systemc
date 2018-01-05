@@ -31,7 +31,7 @@ endif
 
 all:
 	@echo ""
-	@echo "## Get the source"
+	@echo "## Get Source Code"
 	@echo "make download"
 	@echo ""
 	@echo "## Build"
