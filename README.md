@@ -2,17 +2,17 @@
 Compile and Install of the SystemC and TLM Library
 ==================================================
 
-This repository contains make file for easy compile and install of the SystemC and TLM Library.
+This repository contains make file for easy compile and install of [SystemC / TLM](http://www.accellera.org/downloads/standards/systemc).
 
-Get tool and source code
-========================
+Get Source Code
+===============
 
 ## ed_systemc
 ```bash
 git clone https://github.com/embed-dsp/ed_systemc.git
 ```
 
-## SystemC / TLM Source
+## SystemC / TLM
 ```bash
 # Enter the ed_systemc directory.
 cd ed_systemc
