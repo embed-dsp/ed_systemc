@@ -17,27 +17,57 @@ ifeq ($(M),)
 	M = 64
 endif
 
-ifeq ($(M),64)
-	CONFIGURE_FLAGS =
-else
-	CONFIGURE_FLAGS = --host=i686-linux-gnu
-endif
-
-CC = /usr/bin/gcc
-CXX = /usr/bin/g++
-
-# Architecture.
-ARCH = $(shell ./bin/get_arch.sh $(M))
-
-# Installation directories.
-PREFIX = /opt/systemc/$(ARCH)/$(PACKAGE)
-# PREFIX = /opt/systemc/$(PACKAGE)
-# EXEC_PREFIX = $(PREFIX)/$(ARCH)
-
 # Set number of simultaneous jobs (Default 4)
 ifeq ($(J),)
 	J = 4
 endif
+
+# Kernel.
+KERN = $(shell ./bin/get_kernel.sh)
+
+# Machine.
+MACH = $(shell ./bin/get_machine.sh $(M))
+
+# Architecture.
+ARCH = $(KERN)_$(MACH)
+
+# Compiler.
+CC = /usr/bin/gcc
+CXX = /usr/bin/g++
+
+# Installation directory.
+PREFIX = /opt/systemc/$(ARCH)/$(PACKAGE)
+
+# ...
+CONFIGURE_FLAGS =
+
+ifeq ($(M),64)
+	CONFIGURE_FLAGS +=
+else
+	# FIXME: Linux: x86 (32-bit) application running on x86_64 (64-bit) kernel
+	CONFIGURE_FLAGS += --host=i686-linux-gnu
+endif
+
+# MinGW specifics.
+ifeq ($(KERN),mingw32)
+	CC = /mingw/bin/gcc
+	CXX = /mingw/bin/g++
+	PREFIX = /c/opt/systemc/$(ARCH)/$(PACKAGE)
+endif
+
+# MinGW-W64 specifics.
+ifeq ($(KERN),mingw64)
+	CC = /mingw64/bin/gcc
+	CXX = /mingw64/bin/g++
+	PREFIX = /c/opt/systemc/$(ARCH)/$(PACKAGE)
+endif
+
+# Cygwin specifics.
+ifeq ($(KERN),cygwin)
+	PREFIX = /cygdrive/c/opt/systemc/$(ARCH)/$(PACKAGE)
+endif
+
+# EXEC_PREFIX = $(PREFIX)/$(ARCH)
 
 
 all:
