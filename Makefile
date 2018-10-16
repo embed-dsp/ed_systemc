@@ -31,42 +31,52 @@ MACH = $(shell ./bin/get_machine.sh $(M))
 # Architecture.
 ARCH = $(KERN)_$(MACH)
 
-# Compiler.
-CC = /usr/bin/gcc
-CXX = /usr/bin/g++
-
-# Installation directory.
-PREFIX = /opt/systemc/$(ARCH)/$(PACKAGE)
-
 # ...
 CONFIGURE_FLAGS =
 
-ifeq ($(M),64)
-	CONFIGURE_FLAGS +=
-else
+# Linux specifics.
+ifeq ($(KERN),linux)
 	# FIXME: Linux: x86 (32-bit) application running on x86_64 (64-bit) kernel
-	CONFIGURE_FLAGS += --host=i686-linux-gnu
-endif
-
-# MinGW specifics.
-ifeq ($(KERN),mingw32)
-	CC = /mingw/bin/gcc
-	CXX = /mingw/bin/g++
-	PREFIX = /c/opt/systemc/$(ARCH)/$(PACKAGE)
-endif
-
-# MinGW-W64 specifics.
-ifeq ($(KERN),mingw64)
-	CC = /mingw64/bin/gcc
-	CXX = /mingw64/bin/g++
-	PREFIX = /c/opt/systemc/$(ARCH)/$(PACKAGE)
+	ifeq ($(M),32)
+		CONFIGURE_FLAGS += --host=i686-linux-gnu
+	endif
+	# Compiler.
+	CC = /usr/bin/gcc
+	CXX = /usr/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /opt
 endif
 
 # Cygwin specifics.
 ifeq ($(KERN),cygwin)
-	PREFIX = /cygdrive/c/opt/systemc/$(ARCH)/$(PACKAGE)
+	# Compiler.
+	CC = /usr/bin/gcc
+	CXX = /usr/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /cygdrive/c/opt
 endif
 
+# MinGW specifics.
+ifeq ($(KERN),mingw32)
+	# Compiler.
+	CC = /mingw/bin/gcc
+	CXX = /mingw/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /c/opt
+endif
+
+# MinGW-W64 specifics.
+ifeq ($(KERN),mingw64)
+	# NOTE: This is required so SystemC-SCV can find the library directory.
+	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
+	# Compiler.
+	CC = /mingw64/bin/gcc
+	CXX = /mingw64/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /c/opt
+endif
+
+PREFIX = $(INSTALL_DIR)/systemc/$(ARCH)/$(PACKAGE)
 # EXEC_PREFIX = $(PREFIX)/$(ARCH)
 
 
@@ -117,4 +127,10 @@ install:
 
 .PHONY: clean
 clean:
-	-rm -rf build
+	# -rm -rf build
+	cd build/$(PACKAGE) && make clean
+
+
+.PHONY: distclean
+distclean:
+	cd build/$(PACKAGE) && make distclean
