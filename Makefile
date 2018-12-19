@@ -10,7 +10,7 @@
 # Package.
 PACKAGE_NAME = systemc
 
-PACKAGE_VERSION = 2.3.2
+PACKAGE_VERSION = 2.3.3
 
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
@@ -105,13 +105,15 @@ all:
 .PHONY: download
 download:
 	-mkdir src
-	cd src && wget -nc http://www.accellera.org/images/downloads/standards/systemc/$(PACKAGE).tar.gz
+	cd src && wget -nc http://www.accellera.org/images/downloads/standards/systemc/$(PACKAGE).gz
+#	cd src && wget -nc http://www.accellera.org/images/downloads/standards/systemc/$(PACKAGE).tar.gz
 
 
 .PHONY: prepare
 prepare:
 	-mkdir build
-	cd build && tar zxf ../src/$(PACKAGE).tar.gz
+	cd build && tar zxf ../src/$(PACKAGE).gz
+#	cd build && tar zxf ../src/$(PACKAGE).tar.gz
 
 
 .PHONY: configure
