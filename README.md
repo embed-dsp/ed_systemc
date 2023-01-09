@@ -26,7 +26,7 @@ cd ed_systemc
 
 # Edit the Makefile for selecting the SystemC / TLM source version.
 vim Makefile
-PACKAGE_VERSION = 2.3.2
+PACKAGE_VERSION = 2.3.3
 ```
 
 ```bash
@@ -63,11 +63,9 @@ make compile J=2
 
 ```bash
 # Install build products.
-# FIXME: sudo
 sudo make install
 
 # Install 32-bit build products.
-# FIXME: sudo
 sudo make install M=32
 ```
 
@@ -83,7 +81,7 @@ FIXME: linux, arm, ...
 opt/
 └── systemc/
     ├── linux_x86_64/           # 64-bit binaries and libraries for Linux
-    │   └── systemc-2.3.2/
+    │   └── systemc-2.3.3/
     │       ├── docs/           # Documentation.
     │       │   ├── ...
     │       │
@@ -95,7 +93,7 @@ opt/
     │       │   ├── libsystemc.a
     │               ...
     └── linux_x86/              # 32-bit binaries and libraries for Linux
-        └── systemc-2.3.2/
+        └── systemc-2.3.3/
             ...
 ```
 
