@@ -1,13 +1,8 @@
 
-# Copyright (c) 2018 embed-dsp
-# All Rights Reserved
-
-# $Author:   Gudmundur Bogason <gb@embed-dsp.com> $
-# $Date:     $
-# $Revision: $
+# Copyright (c) 2018-2023 embed-dsp, All Rights Reserved.
+# Author: Gudmundur Bogason <gb@embed-dsp.com>
 
 
-# Package.
 PACKAGE_NAME = systemc
 
 PACKAGE_VERSION = 2.3.3
@@ -16,19 +11,38 @@ PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
 # ==============================================================================
 
-# Set number of simultaneous jobs (Default 4)
-ifeq ($(J),)
-	J = 4
+# Determine system.
+SYSTEM = unknown
+ifeq ($(findstring Linux, $(shell uname -s)), Linux)
+	SYSTEM = linux
+endif
+ifeq ($(findstring MINGW32, $(shell uname -s)), MINGW32)
+	SYSTEM = mingw32
+endif
+ifeq ($(findstring MINGW64, $(shell uname -s)), MINGW64)
+	SYSTEM = mingw64
+endif
+ifeq ($(findstring CYGWIN, $(shell uname -s)), CYGWIN)
+	SYSTEM = cygwin
 endif
 
-# System and Machine.
-SYSTEM = $(shell ./bin/get_system.sh)
-MACHINE = $(shell ./bin/get_machine.sh)
+# Determine machine.
+MACHINE = $(shell uname -m)
+
+# Architecture.
+ARCH = $(SYSTEM)_$(MACHINE)
+
+# ==============================================================================
+
+# Set number of simultaneous jobs (Default 8)
+ifeq ($(J),)
+	J = 8
+endif
 
 # System configuration.
 CONFIGURE_FLAGS =
 
-# Linux system.
+# Configuration for linux system.
 ifeq ($(SYSTEM),linux)
 	# Compile for 32-bit on a 64-bit machine.
 	ifeq ("$(MACHINE):$(M)","x86_64:32")
@@ -42,7 +56,29 @@ ifeq ($(SYSTEM),linux)
 	INSTALL_DIR = /opt
 endif
 
-# Cygwin system.
+# Configuration for mingw32 system.
+ifeq ($(SYSTEM),mingw32)
+	# NOTE: This is required so SystemC-SCV can find the library directory.
+	CONFIGURE_FLAGS += --with-arch-suffix=-mingw32
+	# Compiler.
+	CC = /mingw32/bin/gcc
+	CXX = /mingw32/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /c/opt
+endif
+
+# Configuration for mingw64 system.
+ifeq ($(SYSTEM),mingw64)
+	# NOTE: This is required so SystemC-SCV can find the library directory.
+	CONFIGURE_FLAGS += --with-arch-suffix=-mingw64
+	# Compiler.
+	CC = /mingw64/bin/gcc
+	CXX = /mingw64/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /c/opt
+endif
+
+# Configuration for cygwin system.
 ifeq ($(SYSTEM),cygwin)
 	# Compiler.
 	CC = /usr/bin/gcc
@@ -51,35 +87,11 @@ ifeq ($(SYSTEM),cygwin)
 	INSTALL_DIR = /cygdrive/c/opt
 endif
 
-# MSYS2/mingw32 system.
-ifeq ($(SYSTEM),mingw32)
-	# NOTE: This is required so SystemC-SCV can find the library directory.
-	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
-	# Compiler.
-	CC = /mingw32/bin/gcc
-	CXX = /mingw32/bin/g++
-	# Installation directory.
-	INSTALL_DIR = /c/opt
-endif
-
-# MSYS2/mingw64 system.
-ifeq ($(SYSTEM),mingw64)
-	# NOTE: This is required so SystemC-SCV can find the library directory.
-	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
-	# Compiler.
-	CC = /mingw64/bin/gcc
-	CXX = /mingw64/bin/g++
-	# Installation directory.
-	INSTALL_DIR = /c/opt
-endif
-
-# Architecture.
-ARCH = $(SYSTEM)_$(MACHINE)
-
 PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(ARCH)/$(PACKAGE)
 # PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(PACKAGE)
 # EXEC_PREFIX = $(PREFIX)/$(ARCH)
 
+# ==============================================================================
 
 all:
 	@echo "ARCH   = $(ARCH)"
@@ -105,15 +117,13 @@ all:
 .PHONY: download
 download:
 	-mkdir src
-	cd src && wget -nc http://www.accellera.org/images/downloads/standards/systemc/$(PACKAGE).gz
-#	cd src && wget -nc http://www.accellera.org/images/downloads/standards/systemc/$(PACKAGE).tar.gz
+	cd src && wget -nc https://github.com/accellera-official/systemc/archive/refs/tags/$(PACKAGE_VERSION).tar.gz
 
 
 .PHONY: prepare
 prepare:
 	-mkdir build
-	cd build && tar zxf ../src/$(PACKAGE).gz
-#	cd build && tar zxf ../src/$(PACKAGE).tar.gz
+	cd build && tar zxf ../src/$(PACKAGE_VERSION).tar.gz
 
 
 .PHONY: configure
