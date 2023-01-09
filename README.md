@@ -97,19 +97,16 @@ opt/
             ...
 ```
 
-FIXME: windows 64-bit, mingw32, mingw64
-
 
 # Tested System Configurations
 
 System  | M=                | M=32  
 --------|-------------------|-------------------
-linux   | Fedora-28 64-bit  | Fedora-28 64-bit
+linux   | Fedora-37 64-bit  | Fedora-37 64-bit
 mingw64 | Windows-10 64-bit |
 mingw32 | Windows-10 64-bit |
 cygwin  | **FIXME**         |
 
 This has been testes with the following Linux distributions and compilers:
-* `Fedora-27 (64-bit)`
-    * `gcc-7.2.1`
-    * `gcc-7.3.1`
+* `Fedora-37 (64-bit)`
+    * `gcc-12.2.1`
