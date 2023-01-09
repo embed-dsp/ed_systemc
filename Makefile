@@ -59,7 +59,7 @@ endif
 # Configuration for mingw32 system.
 ifeq ($(SYSTEM),mingw32)
 	# NOTE: This is required so SystemC-SCV can find the library directory.
-	CONFIGURE_FLAGS += --with-arch-suffix=-mingw32
+	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
 	# Compiler.
 	CC = /mingw32/bin/gcc
 	CXX = /mingw32/bin/g++
@@ -70,7 +70,7 @@ endif
 # Configuration for mingw64 system.
 ifeq ($(SYSTEM),mingw64)
 	# NOTE: This is required so SystemC-SCV can find the library directory.
-	CONFIGURE_FLAGS += --with-arch-suffix=-mingw64
+	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
 	# Compiler.
 	CC = /mingw64/bin/gcc
 	CXX = /mingw64/bin/g++
