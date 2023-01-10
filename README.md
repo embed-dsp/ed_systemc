@@ -3,12 +3,11 @@
 
 This repository contains a **make** file for easy compile and install of [SystemC / TLM](http://www.accellera.org/downloads/standards/systemc).
 
-This **make** file can build the GTKWave tool on the following systems:
+This **make** file can build the SystemC / TLM library on the following systems:
 * Linux
 * Windows
     * [MSYS2](https://www.msys2.org)/mingw64
     * [MSYS2](https://www.msys2.org)/mingw32
-    * **FIXME**: [Cygwin](https://www.cygwin.com)
 
 # Get Source Code
 
@@ -23,7 +22,9 @@ git clone https://github.com/embed-dsp/ed_systemc.git
 ```bash
 # Enter the ed_systemc directory.
 cd ed_systemc
+```
 
+```bash
 # Edit the Makefile for selecting the SystemC / TLM source version.
 vim Makefile
 PACKAGE_VERSION = 2.3.3
@@ -76,7 +77,6 @@ The build products are therefore installed in the following locations in order
 to allow separate installation for different architectures and simple 
 interoperability with the SCV package:
 
-FIXME: linux, arm, ...
 ```bash
 opt/
 └── systemc/
@@ -102,10 +102,9 @@ opt/
 
 System  | M=                | M=32  
 --------|-------------------|-------------------
-linux   | Fedora-37 64-bit  | Fedora-37 64-bit
-mingw64 | Windows-10 64-bit |
-mingw32 | Windows-10 64-bit |
-cygwin  | **FIXME**         |
+linux   | Fedora-37 64-bit  | 
+mingw64 | Windows-11 64-bit |
+mingw32 | **FIXME**         |
 
 This has been testes with the following Linux distributions and compilers:
 * `Fedora-37 (64-bit)`
