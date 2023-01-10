@@ -29,9 +29,6 @@ endif
 # Determine machine.
 MACHINE = $(shell uname -m)
 
-# Architecture.
-ARCH = $(SYSTEM)_$(MACHINE)
-
 # ==============================================================================
 
 # Set number of simultaneous jobs (Default 8)
@@ -42,6 +39,9 @@ endif
 # System configuration.
 CONFIGURE_FLAGS =
 
+# NOTE: We use this C++ compiler flag to match the defaults used in Verilator.
+CXXFLAGS = -std=gnu++14
+
 # Configuration for linux system.
 ifeq ($(SYSTEM),linux)
 	# Compile for 32-bit on a 64-bit machine.
@@ -49,9 +49,11 @@ ifeq ($(SYSTEM),linux)
 		MACHINE = "x86"
 		CONFIGURE_FLAGS += --host=i686-linux-gnu
 	endif
+
 	# Compiler.
 	CC = /usr/bin/gcc
 	CXX = /usr/bin/g++
+
 	# Installation directory.
 	INSTALL_DIR = /opt
 endif
@@ -60,9 +62,11 @@ endif
 ifeq ($(SYSTEM),mingw32)
 	# NOTE: This is required so SystemC-SCV can find the library directory.
 	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
+
 	# Compiler.
 	CC = /mingw32/bin/gcc
 	CXX = /mingw32/bin/g++
+
 	# Installation directory.
 	INSTALL_DIR = /c/opt
 endif
@@ -71,25 +75,32 @@ endif
 ifeq ($(SYSTEM),mingw64)
 	# NOTE: This is required so SystemC-SCV can find the library directory.
 	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
+
 	# Compiler.
 	CC = /mingw64/bin/gcc
 	CXX = /mingw64/bin/g++
+
 	# Installation directory.
 	INSTALL_DIR = /c/opt
 endif
 
 # Configuration for cygwin system.
-ifeq ($(SYSTEM),cygwin)
-	# Compiler.
-	CC = /usr/bin/gcc
-	CXX = /usr/bin/g++
-	# Installation directory.
-	INSTALL_DIR = /cygdrive/c/opt
-endif
+# ifeq ($(SYSTEM),cygwin)
+# 	# NOTE: This is required so SystemC-SCV can find the library directory.
+# 	# CONFIGURE_FLAGS += --with-arch-suffix=-cygwin
+
+# 	# Compiler.
+# 	CC = /usr/bin/gcc
+# 	CXX = /usr/bin/g++
+
+# 	# Installation directory.
+# 	INSTALL_DIR = /cygdrive/c/opt
+# endif
+
+# Architecture.
+ARCH = $(SYSTEM)_$(MACHINE)
 
 PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(ARCH)/$(PACKAGE)
-# PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(PACKAGE)
-# EXEC_PREFIX = $(PREFIX)/$(ARCH)
 
 # ==============================================================================
 
@@ -128,7 +139,7 @@ prepare:
 
 .PHONY: configure
 configure:
-	cd build/$(PACKAGE) && ./configure CC=$(CC) CXX=$(CXX) --prefix=$(PREFIX) --disable-shared --enable-silent-rules=no $(CONFIGURE_FLAGS)
+	cd build/$(PACKAGE) && ./configure CC=$(CC) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) --prefix=$(PREFIX) --disable-shared --enable-silent-rules=no $(CONFIGURE_FLAGS)
 
 
 .PHONY: compile
