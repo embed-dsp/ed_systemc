@@ -16,14 +16,8 @@ SYSTEM = unknown
 ifeq ($(findstring Linux, $(shell uname -s)), Linux)
 	SYSTEM = linux
 endif
-ifeq ($(findstring MINGW32, $(shell uname -s)), MINGW32)
-	SYSTEM = mingw32
-endif
 ifeq ($(findstring MINGW64, $(shell uname -s)), MINGW64)
 	SYSTEM = mingw64
-endif
-ifeq ($(findstring CYGWIN, $(shell uname -s)), CYGWIN)
-	SYSTEM = cygwin
 endif
 
 # Determine machine.
@@ -40,35 +34,16 @@ endif
 CONFIGURE_FLAGS =
 
 # NOTE: We use this C++ compiler flag to match the defaults used in Verilator.
-CXXFLAGS = -std=gnu++14
+CXXFLAGS = -std=gnu++17
 
 # Configuration for linux system.
 ifeq ($(SYSTEM),linux)
-	# Compile for 32-bit on a 64-bit machine.
-	ifeq ("$(MACHINE):$(M)","x86_64:32")
-		MACHINE = "x86"
-		CONFIGURE_FLAGS += --host=i686-linux-gnu
-	endif
-
 	# Compiler.
 	CC = /usr/bin/gcc
 	CXX = /usr/bin/g++
 
 	# Installation directory.
 	INSTALL_DIR = /opt
-endif
-
-# Configuration for mingw32 system.
-ifeq ($(SYSTEM),mingw32)
-	# NOTE: This is required so SystemC-SCV can find the library directory.
-	CONFIGURE_FLAGS += --with-arch-suffix=-mingw
-
-	# Compiler.
-	CC = /mingw32/bin/gcc
-	CXX = /mingw32/bin/g++
-
-	# Installation directory.
-	INSTALL_DIR = /c/opt
 endif
 
 # Configuration for mingw64 system.
@@ -83,19 +58,6 @@ ifeq ($(SYSTEM),mingw64)
 	# Installation directory.
 	INSTALL_DIR = /c/opt
 endif
-
-# Configuration for cygwin system.
-# ifeq ($(SYSTEM),cygwin)
-# 	# NOTE: This is required so SystemC-SCV can find the library directory.
-# 	# CONFIGURE_FLAGS += --with-arch-suffix=-cygwin
-
-# 	# Compiler.
-# 	CC = /usr/bin/gcc
-# 	CXX = /usr/bin/g++
-
-# 	# Installation directory.
-# 	INSTALL_DIR = /cygdrive/c/opt
-# endif
 
 # Architecture.
 ARCH = $(SYSTEM)_$(MACHINE)
@@ -113,11 +75,11 @@ all:
 	@echo ""
 	@echo "## Build"
 	@echo "make prepare"
-	@echo "make configure [M=32]"
+	@echo "make configure"
 	@echo "make compile [J=...]"
 	@echo ""
 	@echo "## Install"
-	@echo "[sudo] make install [M=32]"
+	@echo "[sudo] make install"
 	@echo ""
 	@echo "## Cleanup"
 	@echo "make clean"
