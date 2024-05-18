@@ -7,7 +7,6 @@ This **make** file can build the SystemC / TLM library on the following systems:
 * Linux
 * Windows
     * [MSYS2](https://www.msys2.org)/mingw64
-    * [MSYS2](https://www.msys2.org)/mingw32
 
 # Get Source Code
 
@@ -46,30 +45,15 @@ make prepare
 ```bash
 # Configure source code.
 make configure
-
-# Configure source code for 32-bit compile on a 64-bit system.
-make configure M=32
 ```
 
 ```bash
-# Compile source code using 4 simultaneous jobs (Default).
+# Compile source code using 8 simultaneous jobs (Default).
 make compile
-
-# Compile source code using 2 simultaneous jobs.
-make compile J=2
 ```
 
 
 # Install
-
-```bash
-# Install build products.
-sudo make install
-
-# Install 32-bit build products.
-sudo make install M=32
-```
-
 
 The SystemC package does NOT install correctly according to the
 [GNU Coding Standards](https://www.gnu.org/prep/standards/standards.html).
@@ -77,35 +61,50 @@ The build products are therefore installed in the following locations in order
 to allow separate installation for different architectures and simple 
 interoperability with the SCV package:
 
+## Linux
+
 ```bash
-opt/
-└── systemc/
-    ├── linux_x86_64/           # 64-bit binaries and libraries for Linux
-    │   └── systemc-2.3.3/
-    │       ├── docs/           # Documentation.
-    │       │   ├── ...
-    │       │
-    │       ├── include/        # Include directory.
-    │       │   ├── systemc.h
-    │       │   ├── tlm.h
-    │       │       ...
-    │       ├── lib-linux64/    # Library directory.
-    │       │   ├── libsystemc.a
-    │               ...
-    └── linux_x86/              # 32-bit binaries and libraries for Linux
-        └── systemc-2.3.3/
-            ...
+# Install build products.
+sudo make install
 ```
 
+```bash
+/opt/
+└── systemc/
+    └── linux_x86_64/           # 64-bit binaries and libraries for Linux
+        └── systemc-2.3.3/
+            ├── docs/           # Documentation.
+            │   ├── ...
+            │
+            ├── include/        # Include directory.
+            │   ├── systemc.h
+            │   ├── tlm.h
+            │       ...
+            ├── lib-linux64/    # Library directory.
+            │   ├── libsystemc.a
+                    ...
+```
 
-# Tested System Configurations
+## Windows: MSYS2/mingw64
 
-System  | M=                | M=32  
---------|-------------------|-------------------
-linux   | Fedora-37 64-bit  | 
-mingw64 | Windows-11 64-bit |
-mingw32 | **FIXME**         |
+```bash
+# Install build products.
+make install
+```
 
-This has been testes with the following Linux distributions and compilers:
-* `Fedora-37 (64-bit)`
-    * `gcc-12.2.1`
+```bash
+/c/opt/
+└── systemc/
+    └── mingw64_x86_64/         # 64-bit binaries and libraries for Windows
+        └── systemc-2.3.3/
+            ├── docs/           # Documentation.
+            │   ├── ...
+            │
+            ├── include/        # Include directory.
+            │   ├── systemc.h
+            │   ├── tlm.h
+            │       ...
+            ├── lib-mingw/      # Library directory.
+            │   ├── libsystemc.a
+                    ...
+```
